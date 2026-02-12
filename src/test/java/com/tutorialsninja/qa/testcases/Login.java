@@ -42,7 +42,6 @@ public class Login {
 
     @Test(priority = 1)
     public void verifyLoginwithValidCredentials() {
-        // TODO: implement
 
         driver.get("https://tutorialsninja.com/demo/");
         driver.findElement(By.linkText("My Account")).click();
