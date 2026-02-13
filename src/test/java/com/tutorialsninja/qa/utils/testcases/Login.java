@@ -1,5 +1,7 @@
-package com.tutorialsninja.qa.testcases;
+package com.tutorialsninja.qa.utils.testcases;
 
+import com.tutorialsninja.qa.common.WebSetup;
+import com.tutorialsninja.qa.utils.Utilities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,22 +16,12 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Login {
+public class Login extends WebSetup {
     WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
-        String browserName = "Chrome";
-        if (browserName.equalsIgnoreCase("chorme")) {
-            driver = new ChromeDriver();
-        } else if (browserName.equalsIgnoreCase("Edge")) {
-            driver = new EdgeDriver();
-
-        } else
-            driver = new FirefoxDriver();
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+         driver = initializeBrowserAndOpenApplication("chrome");
     }
 
     @AfterMethod
@@ -64,7 +56,7 @@ public class Login {
         driver.findElement(By.linkText("My Account")).click();
         driver.findElement(By.linkText("Login")).click();
         driver.findElement(By.xpath("//input[@name='email']")).clear();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys("krshouvik" + GenerateTimeStamp() + "@gmail.com");
+        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(Utilities.GenerateEmailWithTimeStamp());
         driver.findElement(By.xpath("//input[@name='password']")).clear();
         driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Skar@1999");
         driver.findElement(By.xpath("//input[@value='Login']")).click();
@@ -72,9 +64,5 @@ public class Login {
         driver.quit();
     }
 
-    public String GenerateTimeStamp() {
-        Date dt = new Date();
-        String timeStamp = dt.toString().replace(" ", "_").replace(":", "_");
-        return timeStamp;
-    }
+
 }
