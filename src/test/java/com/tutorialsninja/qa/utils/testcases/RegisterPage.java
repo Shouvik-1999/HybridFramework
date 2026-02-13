@@ -13,7 +13,9 @@ import org.testng.annotations.Test;
 
 public class RegisterPage extends WebSetup {
     WebDriver driver;
-
+    public RegisterPage() {
+        super();
+    }
     @AfterMethod
     public void tearDown() {
         driver = new ChromeDriver();
@@ -29,7 +31,6 @@ public class RegisterPage extends WebSetup {
 
     @Test(priority = 1)
     public void verifyRegisterWithValidCredentials() {
-        driver.get("https://tutorialsninja.com/demo/");
         driver.findElement(By.linkText("My Account")).click();
         driver.findElement(By.linkText("Register")).click();
         driver.findElement(By.xpath("//input[@name='firstname']")).clear();
@@ -63,7 +64,7 @@ public class RegisterPage extends WebSetup {
         driver.findElement(By.xpath("//input[@name='lastname']")).clear();
         driver.findElement(By.xpath("//input[@name='lastname']")).sendKeys("Kar");
         driver.findElement(By.xpath("//input[@name='email']")).clear();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys("krshouvik@gmail.com");
+        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(prop.getProperty("validEmail"));
         driver.findElement(By.xpath("//input[@name='telephone']")).clear();
         driver.findElement(By.xpath("//input[@name='telephone']")).sendKeys("9876543210");
         driver.findElement(By.xpath("//input[@name='password']")).clear();

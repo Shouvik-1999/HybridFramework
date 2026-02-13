@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="TutorialsNinja Test Cases">
+        <classes>
+            <class name="com.tutorialsninja.qa.utils.testcases.Login">
+                <methods>
+                    <include name="verifyLoginwithValidCredentials"/>
+                    <include name="verifyLoginWithInvalidCredentials"/>
+                </methods>
+            </class>
+            <class name="com.tutorialsninja.qa.utils.testcases.RegisterPage">
+                <methods>
+                    <include name="verifyRegisterWithValidCredentials"/>
+                    <include name="verifyRegisterWithExistingEmail"/>
+                </methods>
+            </class>
+            <class name="com.tutorialsninja.qa.utils.testcases.SearchPage">
+                <methods>
+                    <include name="verifySearchWithValidProduct"/>
+                    <include name="verifySearchWithInvalidProduct"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
