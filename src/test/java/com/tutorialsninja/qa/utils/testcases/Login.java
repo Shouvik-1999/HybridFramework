@@ -19,9 +19,13 @@ import java.util.concurrent.TimeUnit;
 public class Login extends WebSetup {
     WebDriver driver;
 
+    public Login() {
+        super();
+    }
+
     @BeforeMethod
     public void setUp() {
-         driver = initializeBrowserAndOpenApplication("chrome");
+        driver = initializeBrowserAndOpenApplication(prop.getProperty("browser"));
     }
 
     @AfterMethod
@@ -34,14 +38,12 @@ public class Login extends WebSetup {
 
     @Test(priority = 1)
     public void verifyLoginwithValidCredentials() {
-
-        driver.get("https://tutorialsninja.com/demo/");
         driver.findElement(By.linkText("My Account")).click();
         driver.findElement(By.linkText("Login")).click();
         driver.findElement(By.xpath("//input[@name='email']")).clear();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys("krshouvik@gmail.com");
+        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(prop.getProperty("validEmail"));
         driver.findElement(By.xpath("//input[@name='password']")).clear();
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Skar@1999");
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(prop.getProperty("validPassword"));
         driver.findElement(By.xpath("//input[@value='Login']")).click();
         Assert.assertTrue(driver.findElement(By.linkText("Edit your account information")).isDisplayed());
         driver.quit();
@@ -58,7 +60,7 @@ public class Login extends WebSetup {
         driver.findElement(By.xpath("//input[@name='email']")).clear();
         driver.findElement(By.xpath("//input[@name='email']")).sendKeys(Utilities.GenerateEmailWithTimeStamp());
         driver.findElement(By.xpath("//input[@name='password']")).clear();
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Skar@1999");
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(prop.getProperty("validPassword"));
         driver.findElement(By.xpath("//input[@value='Login']")).click();
         Assert.assertTrue(driver.findElement(By.xpath("//div[@class='alert alert-danger alert-dismissible']")).isDisplayed());
         driver.quit();
