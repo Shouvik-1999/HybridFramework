@@ -1,6 +1,8 @@
 package com.tutorialsninja.qa.utils.testcases;
 
 import com.tutorialsninja.qa.common.WebSetup;
+import com.tutorialsninja.qa.pages.HomePage;
+import com.tutorialsninja.qa.pages.RegisterPaged;
 import com.tutorialsninja.qa.utils.Utilities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,10 +14,11 @@ import org.testng.annotations.Test;
 
 
 public class RegisterPage extends WebSetup {
-    WebDriver driver;
+
     public RegisterPage() {
         super();
     }
+
     @AfterMethod
     public void tearDown() {
         driver = new ChromeDriver();
@@ -26,56 +29,47 @@ public class RegisterPage extends WebSetup {
 
     @BeforeMethod
     public void setUp() {
-        driver = initializeBrowserAndOpenApplication("chrome");
+        initializeBrowserAndOpenApplication("chrome");
     }
 
     @Test(priority = 1)
     public void verifyRegisterWithValidCredentials() {
-        driver.findElement(By.linkText("My Account")).click();
-        driver.findElement(By.linkText("Register")).click();
-        driver.findElement(By.xpath("//input[@name='firstname']")).clear();
-        driver.findElement(By.xpath("//input[@name='firstname']")).sendKeys("Souvik");
-        driver.findElement(By.xpath("//input[@name='lastname']")).clear();
-        driver.findElement(By.xpath("//input[@name='lastname']")).sendKeys("Kar");
-        driver.findElement(By.xpath("//input[@name='email']")).clear();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(Utilities.GenerateEmailWithTimeStamp());
-        driver.findElement(By.xpath("//input[@name='telephone']")).clear();
-        driver.findElement(By.xpath("//input[@name='telephone']")).sendKeys("9876543210");
-        driver.findElement(By.xpath("//input[@name='password']")).clear();
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Skar@112");
-        driver.findElement(By.xpath("//input[@name='confirm']")).clear();
-        driver.findElement(By.xpath("//input[@name='confirm']")).sendKeys("Skar@112");
-        driver.findElement(By.xpath("//input[@name='newsletter' and @value=0]")).click();
-        driver.findElement(By.xpath("//input[@name='agree']")).click();
-        driver.findElement(By.xpath("//input[@value='Continue']")).click();
-        String actualSuccessMessage = driver.findElement(By.xpath("//h1[text()='Your Account Has Been Created!']")).getText();
-        String expectedSuccessMessage = "Your Account Has Been Created!";
+        RegisterPaged rp=new RegisterPaged(driver);
+        HomePage hp=new HomePage(driver);
+        hp.clickOnMyAccountButton();
+        hp.clickOnRegisterButton();
+        rp.enterFirstName("Souvik");
+        rp.enterLastName("Kar");
+        rp.enterEmail(Utilities.GenerateEmailWithTimeStamp());
+        rp.enterTelephone("9876543210");
+        rp.enterPassword("Skar@112");
+        rp.enterConfirmPassword("Skar@112");
+        rp.selectNewsletterSubscribeNoOption();
+        rp.selectPrivacyPolicyCheckBox();
+        rp.clickOnContinueButton();
+        String actualSuccessMessage = rp.retrieveRegisterSuccessMessage();
+        String expectedSuccessMessage = dataProp.getProperty("expectedRegisterSuccessMessage");
         Assert.assertTrue(actualSuccessMessage.contains(expectedSuccessMessage));
         driver.quit();
     }
 
     @Test(priority = 2)
     public void verifyRegisterWithExistingEmail() {
-        driver.get("https://tutorialsninja.com/demo/");
-        driver.findElement(By.linkText("My Account")).click();
-        driver.findElement(By.linkText("Register")).click();
-        driver.findElement(By.xpath("//input[@name='firstname']")).clear();
-        driver.findElement(By.xpath("//input[@name='firstname']")).sendKeys("Souvik");
-        driver.findElement(By.xpath("//input[@name='lastname']")).clear();
-        driver.findElement(By.xpath("//input[@name='lastname']")).sendKeys("Kar");
-        driver.findElement(By.xpath("//input[@name='email']")).clear();
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(prop.getProperty("validEmail"));
-        driver.findElement(By.xpath("//input[@name='telephone']")).clear();
-        driver.findElement(By.xpath("//input[@name='telephone']")).sendKeys("9876543210");
-        driver.findElement(By.xpath("//input[@name='password']")).clear();
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys("Skar@112");
-        driver.findElement(By.xpath("//input[@name='confirm']")).clear();
-        driver.findElement(By.xpath("//input[@name='confirm']")).sendKeys("Skar@112");
-        driver.findElement(By.xpath("//input[@name='newsletter' and @value=0]")).click();
-        driver.findElement(By.xpath("//input[@name='agree']")).click();
-        driver.findElement(By.xpath("//input[@value='Continue']")).click();
-        String actualWarningMessage = driver.findElement(By.xpath("//div[contains(@class,'alert alert-danger')]")).getText();
-        String expectedWarningMessage = "Warning: E-Mail Address is already registered!";
+        RegisterPaged rp=new RegisterPaged(driver);
+        HomePage hp=new HomePage(driver);
+        hp.clickOnMyAccountButton();
+        hp.clickOnRegisterButton();
+        rp.enterFirstName("Souvik");
+        rp.enterLastName("Kar");
+        rp.enterEmail(prop.getProperty("validEmail"));
+        rp.enterTelephone("9876543210");
+        rp.enterPassword("Skar@112");
+        rp.enterConfirmPassword("Skar@112");
+        rp.selectNewsletterSubscribeNoOption();
+        rp.selectPrivacyPolicyCheckBox();
+        rp.clickOnContinueButton();
+        String actualWarningMessage = rp.retrieveDuplicateEmailWarningMessage();
+        String expectedWarningMessage = dataProp.getProperty("expectedDuplicateEmailWarningMessage");
         Assert.assertTrue(actualWarningMessage.contains(expectedWarningMessage));
         driver.quit();
     }

@@ -1,6 +1,7 @@
 package com.tutorialsninja.qa.utils.testcases;
 
 import com.tutorialsninja.qa.common.WebSetup;
+import com.tutorialsninja.qa.pages.SearchPaged;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -9,7 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class SearchPage extends WebSetup {
-    WebDriver driver;
+
         public SearchPage() {
             super();
         }
@@ -21,25 +22,24 @@ public class SearchPage extends WebSetup {
     }
     @BeforeMethod
     public void setUp() {
-        driver = initializeBrowserAndOpenApplication("edge");
+        initializeBrowserAndOpenApplication("edge");
     }
     @Test
     public void verifySearchWithValidProduct() {
-        driver.findElement(By.name("search")).clear();
-        driver.findElement(By.name("search")).sendKeys("MacBook");
-        driver.findElement(By.xpath("//button[@class='btn btn-default btn-lg']")).click();
-        String actualProductName = driver.findElement(By.linkText("MacBook")).getText();
-        String expectedProductName = "MacBook";
+            SearchPaged sp= new SearchPaged(driver);
+        sp.enterProductNameInSearchBox(dataProp.getProperty("validProductName"));
+        sp.clickOnSearchButton();
+        String actualProductName = sp.getMacBookLinkText();
+        String expectedProductName = dataProp.getProperty("expectedProductName");
         Assert.assertTrue(actualProductName.contains(expectedProductName));
     }
     @Test
     public void verifySearchWithInvalidProduct() {
-        driver.get("https://tutorialsninja.com/demo/");
-        driver.findElement(By.name("search")).clear();
-        driver.findElement(By.name("search")).sendKeys("Maccbok");
-        driver.findElement(By.xpath("//button[@class='btn btn-default btn-lg']")).click();
-        String actualNoProductMessage = driver.findElement(By.xpath("//p[text()='There is no product that matches the search criteria.']")).getText();
-        String expectedNoProductMessage = "There is no product that matches the search criteria.";
+        SearchPaged sp= new SearchPaged(driver);
+        sp.enterProductNameInSearchBox(dataProp.getProperty("InvalidProductName"));
+        sp.clickOnSearchButton();
+        String actualNoProductMessage = sp.getNoProductMessageText();
+        String expectedNoProductMessage = dataProp.getProperty("expectedNoProductMessage");
         Assert.assertTrue(actualNoProductMessage.contains(expectedNoProductMessage));
     }
 
