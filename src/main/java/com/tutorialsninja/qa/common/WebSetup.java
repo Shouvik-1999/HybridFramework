@@ -11,10 +11,11 @@ import java.time.Duration;
 import java.util.Properties;
 
 public class WebSetup {
-    WebDriver driver;
+    public WebDriver driver;
     public Properties prop;
+    public Properties dataProp;
 
-    public WebDriver initializeBrowserAndOpenApplication(String browserName) {
+    public void initializeBrowserAndOpenApplication(String browserName) {
 
         if (browserName.equalsIgnoreCase("Chrome")) {
             driver = new ChromeDriver();
@@ -27,13 +28,15 @@ public class WebSetup {
         driver.get(prop.getProperty("url"));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        return driver;
     }
 
     public WebSetup() {
         try {
             FileInputStream fis = new FileInputStream(".\\src\\main\\java\\com\\tutorialsninja\\qa\\config\\config.properties");
+            FileInputStream dataFis=new FileInputStream(".\\src\\main\\java\\com\\tutorialsninja\\qa\\testdata\\testdata.properties");
             prop = new Properties();
+            dataProp=new Properties();
+            dataProp.load(dataFis);
             prop.load(fis);
         } catch (Exception e) {
             e.printStackTrace();
